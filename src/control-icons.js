@@ -12,21 +12,21 @@ module.exports = {
     // Create style element
     var style = document.createElementNS(SvgUtils.svgNS, 'style')
     style.setAttribute('type', 'text/css')
-    style.textContent = '.svg-pan-zoom-control { cursor: pointer; fill: black; fill-opacity: 0.333; } .svg-pan-zoom-control:hover { fill-opacity: 0.8; } .svg-pan-zoom-control-background { fill: white; fill-opacity: 0.5; } .svg-pan-zoom-control-background { fill-opacity: 0.8; }'
+    style.textContent = '.svg-pan-zoom-control { cursor: pointer; fill: #e69d00; fill-opacity: 0.9; } .svg-pan-zoom-control:hover { fill-opacity: 1.0; } .svg-pan-zoom-control-background { fill: white; fill-opacity: 0.5; } .svg-pan-zoom-control-background { fill-opacity: 0.8; }'
     defs.appendChild(style)
 
 
     // Zoom Group
     var zoomGroup = document.createElementNS(SvgUtils.svgNS, 'g');
     zoomGroup.setAttribute('id', 'svg-pan-zoom-controls');
-    zoomGroup.setAttribute('transform', 'translate(' + ( instance.width - 70 ) + ' ' + ( instance.height - 76 ) + ') scale(0.75)');
+    zoomGroup.setAttribute('transform', 'translate(' + ( instance.width - 70 ) + ' ' + ( instance.height - 96 ) + ') scale(0.75)');
     zoomGroup.setAttribute('class', 'svg-pan-zoom-control');
 
     // Control elements
     zoomGroup.appendChild(this._createZoomIn(instance))
     zoomGroup.appendChild(this._createZoomReset(instance))
     zoomGroup.appendChild(this._createZoomOut(instance))
-
+    zoomGroup.appendChild(this._createFullScreen(instance))
     // Finally append created element
     instance.svg.appendChild(zoomGroup)
 
@@ -57,6 +57,52 @@ module.exports = {
 
     return zoomIn
   }
+
+  , _createFullScreen: function(instance) {
+
+    var fullScreenControl = document.createElementNS(SvgUtils.svgNS, 'g');
+    fullScreenControl.setAttribute('id', 'svg-pan-zoom-fullscreen-pan-zoom');
+    fullScreenControl.setAttribute('transform', 'translate(0 70) scale(1.6)');
+    fullScreenControl.setAttribute('class', 'svg-pan-zoom-control');
+    fullScreenControl.addEventListener('click', function() {instance.getPublicInstance().fullscreen()}, false);
+    fullScreenControl.addEventListener('touchstart', function() {instance.getPublicInstance().fullscreen()}, false);
+
+    var g = document.createElementNS(SvgUtils.svgNS, 'g'); 
+
+    var b = document.createElementNS(SvgUtils.svgNS, 'rect'); 
+    b.setAttribute('x', '2');
+    b.setAttribute('y', '2');
+    b.setAttribute('width', '20'); 
+    b.setAttribute('height', '20');
+    b.setAttribute('class', 'svg-pan-zoom-control-background');
+    fullScreenControl.appendChild(b);
+
+    
+    var path = document.createElementNS(SvgUtils.svgNS, 'path');
+    path.setAttribute('d', 'M4,18h14V4H4V18z M6,6h10v10H6V6z');
+
+    var p1 = document.createElementNS(SvgUtils.svgNS, 'polygon');
+    p1.setAttribute('points', '2,16 0,16 0,22 6,22 6,20 2,20');
+
+    var p2 = document.createElementNS(SvgUtils.svgNS, 'polygon');
+    p2.setAttribute('points', '2,2 6,2 6,0 0,0 0,6 2,6');
+    
+    var p3 = document.createElementNS(SvgUtils.svgNS, 'polygon');
+    p3.setAttribute('points', '20,20 16,20 16,22 22,22 22,16 20,16');
+    
+    var p4 = document.createElementNS(SvgUtils.svgNS, 'polygon');
+    p4.setAttribute('points', '16,0 16,2 20,2 20,6 22,6 22,0');
+    
+    g.appendChild(path);
+    g.appendChild(p1);
+    g.appendChild(p2);
+    g.appendChild(p3);
+    g.appendChild(p4);
+    fullScreenControl.appendChild(g);
+    
+    return fullScreenControl;
+  }
+
 
 , _createZoomReset: function(instance){
     // reset
@@ -92,7 +138,7 @@ module.exports = {
     // zoom out
     var zoomOut = document.createElementNS(SvgUtils.svgNS, 'g');
     zoomOut.setAttribute('id', 'svg-pan-zoom-zoom-out');
-    zoomOut.setAttribute('transform', 'translate(30.5 70) scale(0.015)');
+    zoomOut.setAttribute('transform', 'translate(55.5 77) scale(0.015)');
     zoomOut.setAttribute('class', 'svg-pan-zoom-control');
     zoomOut.addEventListener('click', function() {instance.getPublicInstance().zoomOut()}, false);
     zoomOut.addEventListener('touchstart', function() {instance.getPublicInstance().zoomOut()}, false);

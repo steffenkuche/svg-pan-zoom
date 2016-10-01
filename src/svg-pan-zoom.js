@@ -378,6 +378,17 @@ SvgPanZoom.prototype.reset = function() {
   this.resetPan()
 }
 
+SvgPanZoom.prototype.fullscreen = function() {
+	var elem = $('#sv').get(0);
+	if (elem.requestFullscreen) {
+		elem.requestFullscreen();
+	} else if (elem.mozRequestFullScreen) {
+		elem.mozRequestFullScreen();
+	} else if (elem.webkitRequestFullScreen) {
+		elem.webkitRequestFullScreen();
+	}
+}
+
 /**
  * Handle double click event
  * See handleMouseDown() for alternate detection method
@@ -695,6 +706,7 @@ SvgPanZoom.prototype.getPublicInstance = function() {
     , resetZoom: function() {that.resetZoom(); return that.pi}
     , resetPan: function() {that.resetPan(); return that.pi}
     , reset: function() {that.reset(); return that.pi}
+    , fullscreen: function() {that.fullscreen(); return that.pi}
       // Fit, Contain and Center
     , fit: function() {that.fit(); return that.pi}
     , contain: function() {that.contain(); return that.pi}
@@ -741,6 +753,7 @@ var svgPanZoom = function(elementOrSelector, options){
 
     // If instance not found - create one
     instancesStore.push({
+    	elementOrSelector:elementOrSelector,
       svg: svg
     , instance: new SvgPanZoom(svg, options)
     })
