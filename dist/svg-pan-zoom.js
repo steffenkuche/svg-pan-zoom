@@ -32,11 +32,15 @@ module.exports = {
       instance.svg.appendChild(defs)
     }
 
-    // Create style element
-    var style = document.createElementNS(SvgUtils.svgNS, 'style')
-    style.setAttribute('type', 'text/css')
-    style.textContent = '.svg-pan-zoom-control { cursor: pointer; fill: #e69d00; fill-opacity: 0.9; } .svg-pan-zoom-control:hover { fill-opacity: 1.0; } .svg-pan-zoom-control-background { fill: white; fill-opacity: 0.5; } .svg-pan-zoom-control-background { fill-opacity: 0.8; }'
-    defs.appendChild(style)
+    var style = instance.svg.querySelector('style')
+    console.log("add style " + (!style));
+    if (!style) {
+    	// Create style element
+    	style = document.createElementNS(SvgUtils.svgNS, 'style')
+    	style.setAttribute('type', 'text/css')
+    	style.textContent = '.svg-pan-zoom-control { cursor: pointer; fill: #e69d00; fill-opacity: 0.9; } .svg-pan-zoom-control:hover { fill-opacity: 1.0; } .svg-pan-zoom-control-background { fill: white; fill-opacity: 0.5; } .svg-pan-zoom-control-background { fill-opacity: 0.8; }'
+		defs.appendChild(style)
+    }
 
 
     // Zoom Group
@@ -1109,7 +1113,7 @@ SvgPanZoom.prototype.resize = function() {
   var boundingClientRectNormalized = SvgUtils.getBoundingClientRectNormalized(this.svg)
   this.width = boundingClientRectNormalized.width
   this.height = boundingClientRectNormalized.height
-
+  
   // Reposition control icons by re-enabling them
   if (this.options.controlIconsEnabled) {
     this.getPublicInstance().disableControlIcons()
